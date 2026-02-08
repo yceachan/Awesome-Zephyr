@@ -1,0 +1,1 @@
+[02_Zephyr_Environment_Setup.md](../note/Startup/02_Zephyr_Environment_Setup.md)
