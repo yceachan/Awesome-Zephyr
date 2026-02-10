@@ -1,0 +1,32 @@
+{
+	"folders": [
+		{
+			"name": "Zephyr-Suite Root",
+			"path": "../../"
+		},
+		{
+			"name": "Project (App)",
+			"path": "../"
+		},
+		{
+			"name": "SDK Core",
+			"path": "../../sdk"
+		}
+	],
+	"settings": {
+		"git.scanRepositories": [
+			"${workspaceFolder:Zephyr-Suite Root}"
+		],
+		"terminal.integrated.profiles.linux": {
+			"zephyr": {
+				"path": "/bin/bash",
+				"args": ["--init-file", "${workspaceFolder:Zephyr-Suite Root}/prj/.ide/.zephyr-init.sh"]
+			}
+		},
+		"terminal.integrated.defaultProfile.linux": "zephyr",
+		"clangd.arguments": [
+			"--config-file=${workspaceFolder:Project (App)}/.ide/.clangd"
+		]
+	},
+   
+}

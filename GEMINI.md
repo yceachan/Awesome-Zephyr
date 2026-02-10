@@ -42,6 +42,8 @@
 
   - respective all authority source,if Agent refer then ,mark it  below the 1st H1 Title :
 
+    - not only web wiki , **but also local code、note、docs。**:`[wiki name](<relative_path>)`
+    
     - ```md
       # H1 Title
       
