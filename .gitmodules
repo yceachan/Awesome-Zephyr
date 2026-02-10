@@ -1,0 +1,3 @@
+[submodule "sdk/source/zephyr"]
+	path = sdk/source/zephyr
+	url = https://github.com/zephyrproject-rtos/zephyr

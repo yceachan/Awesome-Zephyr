@@ -1,3 +1,4 @@
 **/.obsidian/
 sdk/*
 !sdk/README.md
+!sdk/source/zephyr

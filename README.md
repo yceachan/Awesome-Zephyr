@@ -33,7 +33,7 @@ Start your journey here:
 - [**Subsystem Deep Dive**](note/02-subsystem/01-gpio.md): How GPIO and device models work in Zephyr.
 - [**Devicetree Decoding**](note/dts/02-dts_load_flow.md): Unraveling the DTS loading and merging process.
 
-##  Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -41,21 +41,45 @@ Start your journey here:
 - **Host**: Linux (Ubuntu 22.04+) or Windows (WSL2).
 - **Toolchain**: Zephyr SDK (managed by West).
 
-### Env-setup
+### Quick Setup ()
 
-> [!note]
->
-> [sdk/README.md](sdk/README.md)
+`git clone git@github.com:yceachan/Awesome-Zephyr.git [repo_base]`
 
-```
-cat sdk/README.md
-```
+Refer [sdk/README.md](sdk/README.md) to install whole zephyr SDK env.
 
-```sh
+### Env profile
+
+Add this to your `.bashrc` for quick access:
+
+```bash
 function env-zephyr(){
     source ~/Zephyr-Suite/sdk/venv/bin/activate
     export ZEPHYR_BASE=~/Zephyr-Suite/sdk/source/zephyr
+    export ZEPHYR_SDK_INSTALL_DIR=~/Zephyr-Suite/sdk/Toolchains
 }
+```
+
+there are even more helpful vsc workspace setup
+
+```bash
+(venv) pi@WuYou:~/Zephyr-Suite/prj/.ide$ tree -a
+.
+├── .zephyr-init.sh
+└── prj.code-workspace
+```
+
+effect so like:
+
+```bash
+✅ Zephyr Environment Activated.
+   SDK: /home/pi/Zephyr-Suite/sdk/source/zephyr
+   VENV: /home/pi/Zephyr-Suite/sdk/venv/bin/activate
+---------------------------------------------------
+🛠️  Available Commands:
+   env_zephyr : Re-activate Zephyr environment
+   comtty     : Open Serial Monitor (west espressif monitor)
+---------------------------------------------------
+(venv) pi@WuYou:~/Zephyr-Suite/sdk/source/zephyr$ 
 ```
 
 ## 📜 License
