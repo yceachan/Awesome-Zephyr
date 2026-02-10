@@ -43,6 +43,10 @@ Start your journey here:
 
 ### Env-setup
 
+> [!note]
+>
+> [sdk/README.md](sdk/README.md)
+
 ```
 cat sdk/README.md
 ```

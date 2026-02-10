@@ -9,6 +9,29 @@ update: 2026-02-08
 
 本文档针对使用 **LuatOS ESP32C3-CORE** 开发板（板载 CH343 芯片），详细说明在 WSL 环境下配置设备权限、默认板卡及烧录端口的完整流程。
 
+> [!tip]
+>
+> win 下配置usb设备bind 到wsl：
+>
+> ```shell
+> PS D:\Workspace> usbipd list
+> Connected:
+> BUSID  VID:PID    DEVICE                                                        STATE
+> 1-3    174f:244c  Integrated Camera                                             Not shared
+> 2-3    8087:0029  英特尔(R) 无线 Bluetooth(R)                                   Not shared
+> 2-4    04f3:0c58  ELAN WBF Fingerprint Sensor                                   Not shared
+> 3-1    2717:87b1  USB 输入设备                                                  Not shared
+> 3-3    2b89:0043  USB 输入设备                                                  Not shared
+> 3-4    1a86:5397  USB2.0 Ethernet Adapter                                       Not shared
+> 4-4    1a86:55d3  USB-SERIAL CH343 (COM6)                                       Shared
+> 
+> usbipd lbind --busid 4-4   #obind once
+> 
+> usbipd attach --wsl --busid <busid>    #each time hog usb or reboot
+> ```
+>
+> 
+
 ## 1. 硬件识别与权限配置
 
 在 Linux (WSL) 下，CH343 通常被识别为 `/dev/ttyACM*` 而非 `/dev/ttyUSB*`。
