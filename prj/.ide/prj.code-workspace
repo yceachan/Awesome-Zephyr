@@ -19,8 +19,10 @@
 		],
 		"terminal.integrated.profiles.linux": {
 			"zephyr": {
-				"path": "/bin/bash",
-				"args": ["--init-file", "${workspaceFolder:Zephyr-Suite Root}/prj/.ide/.zephyr-init.sh"]
+				"path": "/usr/bin/zsh",
+				"env": {
+					"ZDOTDIR": "${workspaceFolder:Zephyr-Suite Root}/prj/.ide"
+				}
 			}
 		},
 		"terminal.integrated.defaultProfile.linux": "zephyr",

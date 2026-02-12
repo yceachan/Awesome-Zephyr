@@ -23,7 +23,7 @@
   tags: [tag1 , ... ] 
   desc: one sentence description
   update: YYYY-MM-dd
-  #leave a new line between yaml end with`---`
+  #leave a blank new line between last attribute and `---`
   ---
   
   # H1 Title 

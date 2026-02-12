@@ -125,6 +125,8 @@ Zephyr 线程主要状态：
 - **Waiting/Suspended**: 等待资源 (IPC) 或时间 (sleep)。
 - **Dead**: 运行结束或被终止。
 
+![../../../_images/thread_states.svg](https://ali-oss-yceachan.oss-cn-chengdu.aliyuncs.com/img-bed-typora/thread_states.svg)
+
 ### 关键控制 API
 - `k_sleep(K_MSEC(100))`: 睡眠。
 - `k_yield()`: 主动放弃时间片（回到 Ready 队列末尾）。
