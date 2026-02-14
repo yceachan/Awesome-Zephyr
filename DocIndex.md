@@ -1,6 +1,6 @@
 与Zephyr 官方wiki url 文档对齐的本地 rts 文档
 
-> tree -f -d > ../../GEMINI.md
+# tree -d  docs
 
 .
 ├── ./_doxygen
@@ -203,4 +203,51 @@
 │       └── ./services/zbus/images
 └── ./templates
 
+
+
+## tree -f  docs/kernel/services
+
 200 directories
+.
+├── ./data_passing
+│   ├── ./data_passing/fifos.rst
+│   ├── ./data_passing/lifos.rst
+│   ├── ./data_passing/mailboxes.rst
+│   ├── ./data_passing/message_queues.rst
+│   ├── ./data_passing/pipes.rst
+│   ├── ./data_passing/queues.rst
+│   └── ./data_passing/stacks.rst
+├── ./index.rst
+├── ./interrupts.rst
+├── ./other
+│   ├── ./other/atomic.rst
+│   ├── ./other/fatal.rst
+│   ├── ./other/float.rst
+│   ├── ./other/thread_local_storage.rst
+│   └── ./other/version.rst
+├── ./polling.rst
+├── ./scheduling
+│   ├── ./scheduling/cooperative.svg
+│   ├── ./scheduling/index.rst
+│   ├── ./scheduling/preemptive.svg
+│   └── ./scheduling/timeslicing.svg
+├── ./smp
+│   ├── ./smp/smp.rst
+│   └── ./smp/smpinit.svg
+├── ./synchronization
+│   ├── ./synchronization/condvar.rst
+│   ├── ./synchronization/events.rst
+│   ├── ./synchronization/mutexes.rst
+│   └── ./synchronization/semaphores.rst
+├── ./threads
+│   ├── ./threads/index.rst
+│   ├── ./threads/nothread.rst
+│   ├── ./threads/priorities.svg
+│   ├── ./threads/system_threads.rst
+│   ├── ./threads/thread_states.svg
+│   └── ./threads/workqueue.rst
+└── ./timing
+    ├── ./timing/clocks.rst
+    └── ./timing/timers.rst
+
+8 directories, 33 files

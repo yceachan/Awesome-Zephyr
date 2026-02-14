@@ -33,6 +33,9 @@
   
   - **whenever** naming a node ,especially with chars like `/ \ () （）`,and chinese,using`""`to include the whole node name.
     - e.g. `GpioLib["GPIO库"] -- register --> Sysfs["/sys/class/gpio"]`
+  - **SequenceDiagram**:
+    - Always include `autonumber` to clearly mark the execution sequence.
+    - When using `rect rgb(...)` blocks, the background color must maintain **High Brightness** (each RGB component > 200) to ensure high contrast and readability for black text on light backgrounds.
 
 - 中文知识输出：
   - 最终结论和文档输出必须使用中文，同时保留专业英文术语
