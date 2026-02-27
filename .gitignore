@@ -1,3 +1,5 @@
 **/.obsidian/
 sdk/*
 !sdk/README.md
+**/build/
+**/.cache/

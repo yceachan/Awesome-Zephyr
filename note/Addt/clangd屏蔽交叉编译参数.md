@@ -37,26 +37,13 @@ CompileFlags:
     - -fno-printf-return-value
 ```
 
-### 3.2 指定非标准路径下的配置文件
+### 3.2 配置文件的放置要求
 
-在某些项目结构中，为了保持根目录整洁，`.clangd` 配置文件可能被存放在 `.ide/` 等非标准路径下。由于 `clangd` 默认只在当前目录及其父目录中搜寻 `.clangd` 文件，此时需要通过编辑器插件参数手动指定路径。
+`clangd` 官方并不支持通过命令行参数（如 `--config-file`）去强制指定项目的 `.clangd` 路径。`clangd` 会自动从当前打开的源代码文件所在的目录开始，逐级向父目录中寻找 `.clangd` 文件。
 
-#### VS Code 配置示例 (`.code-workspace`)
-
-在工作区配置文件或 `settings.json` 中添加 `clangd.arguments`：
-
-```json
-{
-    "settings": {
-        "clangd.arguments": [
-            "--config-file=${workspaceFolder:Project (App)}/.ide/.clangd"
-        ]
-    }
-}
-```
-
-*   **`--config-file`**: 强制加载指定路径的配置文件。
-*   **`${workspaceFolder:Name}`**: 使用工作区变量以确保路径在不同环境下均可正确解析。
+为了确保配置能够全局生效，并且避免配置失效导致 Language Server 崩溃：
+*   **最佳实践**：请将 `.clangd` 文件直接放置在工程的根目录下（即包含 `compile_commands.json` 软链接的那个目录，通常是 VS Code 工作区的第一级目录）。
+*   不要尝试在 `.vscode/settings.json` 或 `.code-workspace` 的 `clangd.arguments` 中使用不存在的 `--config-file` 参数，否则会导致 `clangd` 服务启动失败并连续崩溃。
 
 ## 4. 维护说明
 

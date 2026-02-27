@@ -3,11 +3,12 @@
 ## Resource Map
 - `sdk`:zerphy ROTS 开发环境
   - `$ZEPHYR_BASE=/home/pi/Zephyr-Suite/sdk/source/zephyr`
-  - `$ZEPHYR_BASE/doc/**.rts` : 与官方wiki结构对齐的本地rst文档，优先参阅.
+  - `$ZEPHYR_BASE/doc/**.rts` : 与官方wiki结构对齐的本地rst文档/
+    - always referring this , when user asking questions about zephyr. 
+    - all generated notes , should have the same Hierarchy with offical wiki. 
   - `wiki url`:[Developing with Zephyr — Zephyr Project Documentation]
 - `docs` :soft link to`$ZEPHYR_BASE/doc`
-  - [tree -f -d 索引](DocIndex.md)
-- `note`:Agent与开发者共同治理的笔记
+- `note`:md格式笔记库
 - `prj`:工程base路径
 (https://docs.zephyrproject.org/latest/develop/index.html)
 
@@ -15,15 +16,14 @@
 
 - **Note yaml header**
 
-  ```yaml
-  #always begin markdown with yaml ,but not H1 title.
+  ```markdown
+  //always begin markdown with yaml ,but not H1 title.
   ---   
-  #Maintenanced by Agent.
   title:
   tags: [tag1 , ... ] 
   desc: one sentence description
   update: YYYY-MM-dd
-  #leave a blank new line between last attribute and `---`
+  //leave a blank new line between last attribute and `---`
   ---
   
   # H1 Title 
@@ -43,9 +43,9 @@
   
 - Reference:
 
-  - respective all authority source,if Agent refer then ,mark it  below the 1st H1 Title :
+  - always respective source of truth , if Agent refer then ,mark it  below the 1st H1 Title :
 
-    - not only web wiki , **but also local code、note、docs。**:`[wiki name](<relative_path>)`
+    - not only web wiki , **but also local code、note、docs。**
     
     - ```md
       # H1 Title

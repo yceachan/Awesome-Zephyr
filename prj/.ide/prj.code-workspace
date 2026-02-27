@@ -27,7 +27,7 @@
 		},
 		"terminal.integrated.defaultProfile.linux": "zephyr",
 		"clangd.arguments": [
-			"--config-file=${workspaceFolder:Project (App)}/.ide/.clangd"
+			"--query-driver=**/*gcc*"
 		]
 	},
    

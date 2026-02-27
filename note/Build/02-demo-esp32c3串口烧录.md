@@ -74,14 +74,15 @@ ls -l /dev/esp32c3
 为了避免每次都输入 `-b esp32c3_luatos_core --esp-device /dev/ttyACM0`，我们可以通过配置文件固化这些参数。
 
 ### 2.1 设置默认板卡 (Default Board)
-使用 `west config` 设置当前工作区的默认板卡。
+推荐在应用工程的 `CMakeLists.txt` 中直接指定默认板卡，这样可以做到工程级隔离，避免污染整个 SDK 工作区的配置。
 
-```bash
-# 在项目根目录下执行
-west config build.board esp32c3_luatos_core
+```cmake
+cmake_minimum_required(VERSION 3.20.0)
+# 必须在 find_package 之前设置 BOARD
+set(BOARD esp32c3_luatos_core)
+find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 ```
-*   **效果**: 运行 `west build` 时无需再加 `-b` 参数。
-*   **存储位置**: `.west/config`。
+*   **效果**: 运行 `west build` 或 `west build -p always` 时无需再加 `-b` 参数，且配置与工程代码绑定，便于版本控制。
 
 ### 2.2 设置默认烧录端口 (Default Flash Port)
 
@@ -146,11 +147,19 @@ west config runner.esp32.flags -- "--esp-device=/dev/esp32c3"
 
 ## 5. 深度问答 (FAQ)
 
-Q: 为什么 `board_runner_args` 可以生效，而 `set(BOARD ...)` 在 CMakeLists.txt 中不行？
+Q: 为什么有时 `set(BOARD ...)` 在 CMakeLists.txt 中会不生效或报错？
 
-**A**: 这是由 Zephyr 构建系统的生命周期决定的：
-- **`BOARD`** 变量必须在 CMake **启动阶段**（甚至在解析 `CMakeLists.txt` 之前）就被确定，因为它决定了要加载哪个架构的编译器和设备树定义。如果在 `CMakeLists.txt` 中设置，构建系统已经处于中后期，无法“倒退”去更换地基。
-- **`board_runner_args`** 只是向构建目录下的 `zephyr/runners.yaml` 注入一段文本。`west flash` 命令在编译完成后独立运行，它读取这个 YAML 文件来获取端口信息。因此，它是对“执行阶段”的配置。
+**A**: 这是由 Zephyr 构建系统的生命周期和加载顺序决定的。根据官方文档：
+- **`BOARD`** 变量必须在 `find_package(Zephyr ...)` **之前**设置。因为 `find_package(Zephyr)` 是引导整个 Zephyr 构建系统（包括加载对应架构的编译器和设备树定义）的入口。
+- 如果在 `find_package(Zephyr ...)` 之后再 `set(BOARD ...)`，构建系统此时已经加载了默认（或缓存）的地基配置，无法再“倒退”更换板卡，从而导致构建忽略该设置或在 Pristine 编译时直接报错。
+
+> [!note]
+> **Ref:** `$ZEPHYR_BASE/doc/develop/application/index.rst` (Application CMakeLists.txt)
+> 构建系统解析 `BOARD` 顺序 (优先级由高到低): 
+> 1. CMake Cache (之前构建保留的缓存)
+> 2. 命令行参数 (如 `west build -b YOUR_BOARD`)
+> 3. 环境变量 `BOARD`
+> 4. `CMakeLists.txt` 中在 `find_package` 前显式设置的 `set(BOARD ...)` 变量。
 
 Q: 如何验证我的配置已经注入？
 

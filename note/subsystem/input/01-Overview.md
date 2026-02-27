@@ -139,7 +139,7 @@ graph TD
     InputCore -- INPUT_CALLBACK_DEFINE --> AppCB[Application Callback]
     
     subgraph "Application Layer"
-    AppCB --> Logic[Business Logic (Switch on evt->code)]
+    AppCB --> Logic["Business Logic (Switch on evt->code)"]
     end
 ```
 

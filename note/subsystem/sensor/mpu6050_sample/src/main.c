@@ -1,0 +1,151 @@
+/*
+ * Copyright (c) 2019 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#include <zephyr/kernel.h>
+#include <zephyr/device.h>
+#include <zephyr/drivers/sensor.h>
+#include <stdio.h>
+
+/**
+ * @brief Get current system uptime as a formatted string.
+ *
+ * @return A pointer to a static buffer containing "HH:MM:SS.MMM"
+ */
+static const char *now_str(void)
+{
+	static char buf[16]; /* ...HH:MM:SS.MMM */
+	uint32_t now = k_uptime_get_32();
+	unsigned int ms = now % MSEC_PER_SEC;
+	unsigned int s;
+	unsigned int min;
+	unsigned int h;
+
+	now /= MSEC_PER_SEC;
+	s = now % 60U;
+	now /= 60U;
+	min = now % 60U;
+	now /= 60U;
+	h = now;
+
+	snprintf(buf, sizeof(buf), "%u:%02u:%02u.%03u",
+		 h, min, s, ms);
+	return buf;
+}
+
+/**
+ * @brief Fetch and process MPU6050 sensor data.
+ *
+ * This function performs a 'fetch' to capture a synchronized snapshot of
+ * acceleration, gyroscope, and temperature data from the sensor. It then
+ * extracts and prints these values.
+ *
+ * @param dev Pointer to the MPU6050 device instance.
+ * @return 0 on success, or a negative errno code on failure.
+ */
+static int process_mpu6050(const struct device *dev)
+{
+	struct sensor_value temperature;
+	struct sensor_value accel[3];
+	struct sensor_value gyro[3];
+	int rc = sensor_sample_fetch(dev);
+
+	if (rc == 0) {
+		rc = sensor_channel_get(dev, SENSOR_CHAN_ACCEL_XYZ,
+					accel);
+	}//@return 0 if successful, negative errno code if failure. so goes on the pattern if rc == 0
+	if (rc == 0) {
+		rc = sensor_channel_get(dev, SENSOR_CHAN_GYRO_XYZ,
+					gyro);
+	}
+	if (rc == 0) {
+		rc = sensor_channel_get(dev, SENSOR_CHAN_DIE_TEMP,
+					&temperature);
+	}
+	if (rc == 0) {
+		printf("[%s]:%g Cel\n"
+		       "  accel %f %f %f m/s/s\n"
+		       "  gyro  %f %f %f rad/s\n",
+		       now_str(),
+		       sensor_value_to_double(&temperature),
+		       sensor_value_to_double(&accel[0]),
+		       sensor_value_to_double(&accel[1]),
+		       sensor_value_to_double(&accel[2]),
+		       sensor_value_to_double(&gyro[0]),
+		       sensor_value_to_double(&gyro[1]),
+		       sensor_value_to_double(&gyro[2]));
+	} else {
+		printf("sample fetch/get failed: %d\n", rc);
+	}
+
+	return rc;
+}
+
+#ifdef CONFIG_MPU6050_TRIGGER
+static struct sensor_trigger trigger;
+
+/**
+ * @brief Data Ready trigger handler for MPU6050.
+ *
+ * This callback is executed when the sensor indicates data is ready.
+ * It calls process_mpu6050 to handle the data. Note that in a production
+ * system, time-consuming operations like printf should be avoided here.
+ *
+ * @param dev Pointer to the MPU6050 device instance.
+ * @param trig Pointer to the trigger that fired.
+ */
+static void handle_mpu6050_drdy(const struct device *dev,
+				const struct sensor_trigger *trig)
+{
+	int rc = process_mpu6050(dev);
+
+	if (rc != 0) {
+		printf("cancelling trigger due to failure: %d\n", rc);
+		(void)sensor_trigger_set(dev, trig, NULL);
+		return;
+	}
+}
+#endif /* CONFIG_MPU6050_TRIGGER */
+
+/**
+ * @brief Main entry point for the MPU6050 sample.
+ *
+ * Initializes the sensor and sets up either triggered or polling-based
+ * sampling depending on the Kconfig configuration.
+ */
+int main(void)
+{
+	const struct device *const mpu6050 = DEVICE_DT_GET_ONE(invensense_mpu6050);
+
+	if (!device_is_ready(mpu6050)) {
+		printf("Device %s is not ready\n", mpu6050->name);
+		return 0;
+	}
+
+#ifdef CONFIG_MPU6050_TRIGGER
+	trigger = (struct sensor_trigger) {
+		.type = SENSOR_TRIG_DATA_READY,
+		.chan = SENSOR_CHAN_ALL,
+	};
+	if (sensor_trigger_set(mpu6050, &trigger,
+			       handle_mpu6050_drdy) < 0) {
+		printf("Cannot configure trigger\n");
+		return 0;
+	}
+	printk("Configured for triggered sampling.\n");
+#endif
+
+	while (!IS_ENABLED(CONFIG_MPU6050_TRIGGER)) {
+		int rc = process_mpu6050(mpu6050);
+
+		if (rc != 0) {
+			break;
+		}
+		k_sleep(K_SECONDS(2));
+	}
+
+	/* triggered runs with its own thread after exit */
+	return 0;
+}

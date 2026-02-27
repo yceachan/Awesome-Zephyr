@@ -11,7 +11,7 @@ update: 2026-02-13
 
 ## High Priority (核心机制)
 
-- [ ] **02-Message_Queue.md** (`k_msgq`)
+- [x] **02-Message_Queue.md** (`k_msgq`)
     - **目标**: 解析消息队列的工作原理与最佳实践。
     - **重要性**: 最常用的 IPC 机制，适用于线程间传值、ISR 向线程发送数据。
     - **关键点**:
