@@ -27,7 +27,7 @@ update: 2026-02-08
 > 
 > usbipd lbind --busid 4-4   #obind once
 > 
-> usbipd attach --wsl --busid <busid>    #each time hog usb or reboot
+> usbipd attach --wsl -a --busid <busid>    #each time hog usb or reboot -a :auto attach when hog
 > ```
 >
 > 
@@ -39,7 +39,7 @@ update: 2026-02-08
 ### 1.1 确认设备节点
 ```bash
 lsusb
-# ID 1a86:55d3 QinHeng Electronics USB Single Serial
+#Bus 001 Device 002: ID 1a86:55d3 QinHeng Electronics USB Single Serial
 
 ls -l /dev/ttyACM*
 # crw-rw---- 1 root dialout ... /dev/ttyACM0
